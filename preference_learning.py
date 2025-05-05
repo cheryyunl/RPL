@@ -59,48 +59,20 @@ def cross_model_voting(solutions, eval_models, eval_tokenizers, question, answer
     
     return ranked_solutions
 
-# Generate justifications for preferred reasoning strategies
-def generate_justifications(ranked_solutions, eval_model, eval_tokenizer, question, device):
-    justified_pairs = []
+def generate_pairs(ranked_solutions, question):
+    """Create preference pairs from ranked solutions without generating justifications."""
+    pairs = []
     
-    # For each pair where one solution is preferred over another
+    # Create pairs from adjacent solutions in the ranking
     for i in range(len(ranked_solutions)-1):
-        winner_solution = ranked_solutions[i][0]
-        loser_solution = ranked_solutions[i+1][0]
+        winner = ranked_solutions[i][0]
+        loser = ranked_solutions[i+1][0]
         
-        # Generate justification for why the winning solution is better
-        prompt = justification_template.format(
-            question,
-            winner_solution["text"]
-        )
-        
-        messages = [
-            {"role": "system", "content": "You are a helpful assistant specializing in explaining mathematical reasoning."},
-            {"role": "user", "content": prompt}
-        ]
-        
-        text = eval_tokenizer.apply_chat_template(
-            messages,
-            tokenize=False,
-            add_generation_prompt=True
-        )
-        
-        model_inputs = eval_tokenizer([text], return_tensors="pt").to(device)
-        generated_ids = eval_model.generate(
-            **model_inputs,
-            max_new_tokens=1024
-        )
-        generated_ids = [
-            output_ids[len(input_ids):] for input_ids, output_ids in zip(model_inputs.input_ids, generated_ids)
-        ]
-        
-        justification = eval_tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0]
-        
-        justified_pairs.append({
+        pairs.append({
             "question": question,
-            "chosen": winner_solution["text"],
-            "rejected": loser_solution["text"],
-            "justification": justification
+            "chosen": winner["text"],
+            "rejected": loser["text"],
         })
     
-    return justified_pairs
+    return pairs
+    return pairs

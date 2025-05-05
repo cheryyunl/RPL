@@ -1,6 +1,6 @@
 from model import State, VisionLanguageModel
 from mcts import mcts_search
-from preference_learning import cross_model_voting, generate_justifications
+from preference_learning import cross_model_voting, generate_pairs
 
 def solve_math_reasoning_vlm_with_rpl(image_data, text_prompt, model, generation_config, processor, 
                                       eval_models, eval_tokenizers, question, answer, n_iterations, device):
@@ -40,15 +40,11 @@ def solve_math_reasoning_vlm_with_rpl(image_data, text_prompt, model, generation
             device
         )
         
-        # Generate justifications for preference pairs
-        justified_pairs = generate_justifications(
+        pairs = generate_pairs(
             ranked_solutions,
-            eval_models[0],  # Use first model for justification generation
-            eval_tokenizers[0],
-            question,
-            device
+            question
         )
         
-        return root, steps, solution, diverse_solutions, ranked_solutions, justified_pairs, n_iter
+        return root, steps, solution, diverse_solutions, ranked_solutions, pairs, n_iter
     else:
         return root, steps, solution, diverse_solutions, [], [], n_iter

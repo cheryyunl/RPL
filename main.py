@@ -68,7 +68,7 @@ def main(args):
         text_prompt = few_shot_cot_prompt + '{}'.format(question)
 
         # Enhanced solve function with RPL components
-        root, solution_steps, solution, diverse_solutions, ranked_solutions, justified_pairs, n_iter = solve_math_reasoning_vlm_with_rpl(
+        root, solution_steps, solution, diverse_solutions, ranked_solutions, pairs, n_iter = solve_math_reasoning_vlm_with_rpl(
             image_data=image_data,
             text_prompt=text_prompt,
             model=model,
@@ -89,8 +89,8 @@ def main(args):
             final_response.append(data)
             
         # Store preference pairs for DPO training
-        if justified_pairs:
-            for pair in justified_pairs:
+        if pairs:
+            for pair in pairs:
                 pair_with_image = pair.copy()
                 pair_with_image["image"] = image_data
                 all_preference_pairs.append(pair_with_image)
