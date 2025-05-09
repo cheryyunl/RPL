@@ -1,0 +1,7 @@
+pandas
+tqdm
+transformers>=4.39.0
+pyarrow
+accelerate
+einops
+datasets
