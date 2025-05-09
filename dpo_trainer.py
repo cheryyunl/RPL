@@ -71,7 +71,7 @@ class DPOTrainer:
         
         return torch.tensor(logps, device=self.device)
     
-    def train(self, train_dataloader, epochs):
+    def train(self, train_dataloader, epochs, save_interval=1):
         """Train the model using DPO for multiple epochs."""
         self.model.train()
         
@@ -82,3 +82,10 @@ class DPOTrainer:
                 total_loss += loss
             
             print(f"Epoch {epoch+1}/{epochs}, Average Loss: {total_loss/len(train_dataloader)}")
+
+            # Save the model every save_interval epochs
+            if (epoch + 1) % save_interval == 0:
+                self.model.save_pretrained(f"dpo_model_epoch_{epoch+1}")
+                self.tokenizer.save_pretrained(f"dpo_tokenizer_epoch_{epoch+1}")
+                self.processor.save_pretrained(f"dpo_processor_epoch_{epoch+1}")
+                self.optimizer.save_pretrained(f"dpo_optimizer_epoch_{epoch+1}")

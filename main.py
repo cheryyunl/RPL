@@ -99,6 +99,11 @@ def main(args):
     df = pd.DataFrame(final_response)
     df.to_parquet(args.output_file, index=False, engine='pyarrow')
     
+    # Save preference dataset before DPO training
+    preference_df = pd.DataFrame(all_preference_pairs)
+    preference_df.to_parquet(args.preference_data_file, index=False, engine='pyarrow')
+    print(f"Preference data saved to {args.preference_data_file}")
+    
     # Phase 2: DPO training if preference pairs were generated
     if len(all_preference_pairs) > 0 and args.do_train:
         print(f"Generated {len(all_preference_pairs)} preference pairs for training")
@@ -129,7 +134,7 @@ def main(args):
         
         # Train with DPO
         print("Starting DPO training...")
-        dpo_trainer.train(train_dataloader, args.epochs)
+        dpo_trainer.train(train_dataloader, args.epochs, save_interval=args.save_interval)
         
         # Save the fine-tuned model
         model.save_pretrained(args.output_model_dir)
@@ -158,6 +163,7 @@ if __name__ == "__main__":
     parser.add_argument("--batch_size", type=int, default=4)
     parser.add_argument("--learning_rate", type=float, default=1e-5)
     parser.add_argument("--epochs", type=int, default=3)
+    parser.add_argument("--save_interval", type=int, default=1)
     parser.add_argument("--beta", type=float, default=0.1, help="DPO beta parameter")
     
     args = parser.parse_args()
