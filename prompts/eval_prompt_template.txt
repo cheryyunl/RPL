@@ -1,0 +1,5 @@
+Please help me judge the correctness of the generated answer and the corresponding rationale. 
+Question: {}
+Ground truth answer: {}
+Generated rationale and answer: {}
+Your output should only be one sentence: the generated answer is true or false.

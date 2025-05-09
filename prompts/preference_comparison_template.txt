@@ -1,0 +1,17 @@
+You are given a math question and its correct final answer, along with two different solution approaches labeled A and B.
+Your task is to evaluate which solution demonstrates better reasoning, based on clarity, logical correctness, and alignment with the final answer.
+
+Question:
+{}
+
+Correct Final Answer:
+{}
+
+Approach A:
+{}
+
+Approach B:
+{}
+
+Please analyze both approaches and determine which one is superior.
+Respond with one line only: "Preferred approach: A" or "Preferred approach: B".

@@ -1,5 +1,5 @@
 import torch
-from prompt_templates import preference_comparison_template, justification_template
+from prompt_templates import preference_comparison_template # , justification_template
 
 # Cross-model majority voting for determining superior reasoning strategies
 def cross_model_voting(solutions, eval_models, eval_tokenizers, question, answer, device):

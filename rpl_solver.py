@@ -1,5 +1,5 @@
 from model import State, VisionLanguageModel
-from mcts import mcts_search
+from mcts_search import mcts_search
 from preference_learning import cross_model_voting, generate_pairs
 
 def solve_math_reasoning_vlm_with_rpl(image_data, text_prompt, model, generation_config, processor, 
